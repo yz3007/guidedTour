@@ -1,34 +1,52 @@
 pipeline{
 	agent any
 	stages{
-		stage('No-op'){
+		stage('Build'){
 			steps{
-				sh 'ls;exit 1'
+				echo 'Building'
 			}
 		}
+		stage('Test'){
+			steps{
+				echo 'Testing'
+			}
+		}
+		stage('Deploy - Staging'){
+			steps{
+				echo './deploy staging'
+				echo './run-smoke-tests'
+			}
+		}
+		stage('Sanity check'){
+			steps{
+				input "Does the staging env look ok?"
+			}
+		}
+		stage('Deploy - Production'){
+			steps{
+				echo './deploy production'
+			}
+		}
+	
 	}
 	
 	post{
-		always{
-			echo 'One way or another, I have finished'
-			deleteDir()/* clean up our workspace */
+		always {
+			echo 'One way or another, I have failed'
+			deleteDir()
 		}
-        success {
-            echo 'I succeeeded!'
-        }
-        unstable {
-            echo 'I am unstable :/'
-        }
-        failure {
-            echo 'I failed :('
-	    mail to: 'yufei.zhao@wxciv.com',
-		 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-		 body: "SOmething is wrong with ${env.BUILD_URL}"
-        }
-        changed {
-            echo 'Things were different before...'
-        }
-		
+		success{
+			echo 'I succeeded!'
+		}
+		unstable{
+			echo 'I am unstable :/'
+		}
+		failure{
+			echo 'I failed :('
+		}
+		changed{
+			echo 'THings were different before...'
+		}
 	}
-	
+
 }
