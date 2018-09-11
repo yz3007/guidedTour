@@ -4,7 +4,8 @@ pipeline{
 		stage('Deploy'){
 			steps{
 				retry(3){
-					sh "./flakey-deploy.sh"
+					//sh "./flakey-deploy.sh"
+					echo "hello, world"
 				}
 				
 				timeout(time:3, unit:'MINUTES'){
