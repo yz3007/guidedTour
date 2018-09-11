@@ -3,7 +3,7 @@ pipeline{
 	stages{
 		stage('No-op'){
 			steps{
-				sh 'ls'
+				sh 'ls;exit 1'
 			}
 		}
 	}
@@ -21,6 +21,9 @@ pipeline{
         }
         failure {
             echo 'I failed :('
+	    mail to: 'yufei.zhao@wxciv.com',
+		 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+		 body: "SOmething is wrong with ${env.BUILD_URL}"
         }
         changed {
             echo 'Things were different before...'
