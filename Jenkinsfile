@@ -1,11 +1,14 @@
 pipeline{
-	agent {docker {image 'maven:3.3.3'}}
-	stages {
-		stage('build'){
+	agent any
+	stages{
+		stage('Build'){
 			steps{
-				sh 'mvn --version'
+				sh 'echo "Hello World"'
+				sh '''
+					echo "Mutiline shell steps works too"
+					ls -lah
+				'''
 			}
 		}
 	}
-
 }
